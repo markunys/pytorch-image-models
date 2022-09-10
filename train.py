@@ -413,6 +413,10 @@ def main():
         bn_eps=args.bn_eps,
         scriptable=args.torchscript,
         checkpoint_path=args.initial_checkpoint)
+    model.classifier = nn.Sequential(
+        nn.Linear(model.classifier.in_features, 512),
+        nn.Linear(512, args.num_classes)
+    )
     if args.num_classes is None:
         assert hasattr(model, 'num_classes'), 'Model must have `num_classes` attr if not set on cmd line/config.'
         args.num_classes = model.num_classes  # FIXME handle model default vs config num_classes more elegantly
